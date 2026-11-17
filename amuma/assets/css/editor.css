@@ -1,0 +1,7 @@
+/* Estilos del editor de bloques: así se ve parecido a la web mientras se escribe. */
+@font-face { font-family: "Fraunces"; font-weight: 100 900; src: url("../fonts/fraunces-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-weight: 100 1000; src: url("../fonts/dm-sans-latin-wght-normal.woff2") format("woff2"); }
+body { font-family: "DM Sans", system-ui, sans-serif; color: #2b0f22; font-size: 18px; line-height: 1.75; }
+h1, h2, h3, h4, .editor-post-title__input { font-family: "Fraunces", Georgia, serif; font-weight: 400; letter-spacing: -0.02em; line-height: 1.1; }
+a { color: #c4166a; }
+blockquote { border-left: 3px solid #e5267b; padding-left: 1.2em; font-family: "Fraunces", Georgia, serif; font-size: 1.3em; }
