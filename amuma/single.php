@@ -17,7 +17,7 @@ while ( have_posts() ) :
 		<header class="single__head">
 			<div class="single__ribbon" aria-hidden="true"><?php get_template_part( 'template-parts/ribbon', null, array( 'id' => 'single-ribbon', 'class' => 'ribbon--page' ) ); ?></div>
 			<div class="container container--narrow">
-				<a class="back" href="<?php echo esc_url( amuma_news_url() ); ?>" data-fade><?php echo amuma_icon( 'chevron-l' ); // phpcs:ignore ?> <?php esc_html_e( 'Actualidad', 'amuma' ); ?></a>
+				<a class="back" href="<?php echo esc_url( amuma_news_url() ); ?>" data-fade><?php echo amuma_icon( 'chevron-l' ); // phpcs:ignore ?> <?php esc_html_e( 'Noticias', 'amuma' ); ?></a>
 				<div class="single__meta" data-fade>
 					<?php if ( $amuma_cat ) : ?>
 						<a class="pill pill--<?php echo esc_attr( $amuma_cat->slug ); ?>" href="<?php echo esc_url( get_category_link( $amuma_cat ) ); ?>"><?php echo esc_html( $amuma_cat->name ); ?></a>

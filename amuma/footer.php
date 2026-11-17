@@ -13,7 +13,7 @@
 	</div>
 	<div class="container">
 		<div class="site-footer__top">
-			<p class="site-footer__claim" data-split><?php esc_html_e( 'Juntas somos más fuertes.', 'amuma' ); ?></p>
+			<p class="site-footer__claim" data-split><?php esc_html_e( 'Estamos aquí para ti.', 'amuma' ); ?></p>
 			<a class="btn btn--light" data-magnetic href="mailto:<?php echo esc_attr( antispambot( amuma_opt( 'email' ) ) ); ?>">
 				<span><?php esc_html_e( 'Escríbenos', 'amuma' ); ?></span><?php echo amuma_icon( 'arrow' ); // phpcs:ignore ?>
 			</a>
@@ -60,10 +60,17 @@
 		<div class="site-footer__word" aria-hidden="true">AMUMA</div>
 
 		<div class="site-footer__bottom">
-			<span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> AMUMA · <?php esc_html_e( 'Asociación de Mujeres Afectadas de Cáncer de Mama y Ginecológico de Castilla-La Mancha', 'amuma' ); ?></span>
-			<?php if ( function_exists( 'the_privacy_policy_link' ) ) : ?>
-				<span><?php the_privacy_policy_link(); ?></span>
-			<?php endif; ?>
+			<span>© <?php echo esc_html( gmdate( 'Y' ) ); ?> AMUMA · <?php esc_html_e( 'Asociación de Cáncer de Mama y Ginecológico de Castilla-La Mancha', 'amuma' ); ?></span>
+			<nav class="legal" aria-label="<?php esc_attr_e( 'Información legal', 'amuma' ); ?>">
+				<?php
+				foreach ( array( 'aviso-legal' => __( 'Aviso legal', 'amuma' ), 'politica-privacidad' => __( 'Política de privacidad', 'amuma' ), 'politica-de-cookies' => __( 'Política de cookies', 'amuma' ) ) as $amuma_slug => $amuma_label ) {
+					$amuma_pg = get_page_by_path( $amuma_slug );
+					if ( $amuma_pg ) {
+						printf( '<a href="%s">%s</a>', esc_url( get_permalink( $amuma_pg ) ), esc_html( $amuma_label ) );
+					}
+				}
+				?>
+			</nav>
 			<a href="#contenido" class="to-top" data-to-top><?php esc_html_e( 'Volver arriba', 'amuma' ); ?> <?php echo amuma_icon( 'arrow-up' ); // phpcs:ignore ?></a>
 		</div>
 	</div>

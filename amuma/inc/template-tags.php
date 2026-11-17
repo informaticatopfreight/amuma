@@ -34,6 +34,17 @@ function amuma_post_image( $post = null, $size = 'amuma-card' ) {
 		$id = (int) $m[1];
 	}
 
+	// Contenido antiguo de Divi: primera foto de una galería o de un módulo de imagen.
+	if ( ! $id && preg_match( '/\[et_pb_gallery[^\]]*gallery_ids=["\'\x{201D}\x{2033}]?(\d+)/u', $post->post_content, $m ) ) {
+		$id = (int) $m[1];
+	}
+	if ( ! $id && preg_match( '/\[et_pb_image[^\]]*src=["\']([^"\']+)/', $post->post_content, $m ) ) {
+		$id = attachment_url_to_postid( $m[1] );
+		if ( ! $id ) {
+			return array( 'id' => 0, 'url' => $m[1], 'alt' => '' );
+		}
+	}
+
 	if ( $id ) {
 		$src = wp_get_attachment_image_src( $id, $size );
 		if ( $src ) {
@@ -45,7 +56,7 @@ function amuma_post_image( $post = null, $size = 'amuma-card' ) {
 		}
 	}
 
-	if ( preg_match( '/<img[^>]+src=["\']([^"\']+)["\']/i', $post->post_content, $m ) ) {
+	if ( preg_match( '/<img[^>]+src=["\']((?![^"\']*(?:fbcdn|emoji|s\.w\.org))[^"\']+)["\']/i', $post->post_content, $m ) ) {
 		return array(
 			'id'  => 0,
 			'url' => $m[1],
@@ -85,13 +96,24 @@ function amuma_photo_count( $post = null ) {
 	if ( ! $post ) {
 		return 0;
 	}
-	$count = preg_match_all( '/<img\s/i', $post->post_content );
-	// Galerías clásicas [gallery ids="1,2,3"].
-	if ( preg_match_all( '/\[gallery[^\]]*ids=["\']([^"\']+)["\']/', $post->post_content, $m ) ) {
-		foreach ( $m[1] as $ids ) {
-			$count += count( array_filter( explode( ',', $ids ) ) );
+	$content = $post->post_content;
+	// Imágenes "normales" (sin contar emojis pegados desde Facebook).
+	$count = 0;
+	if ( preg_match_all( '/<img\s[^>]*src=["\']([^"\']+)/i', $content, $m ) ) {
+		foreach ( $m[1] as $src ) {
+			if ( ! preg_match( '/fbcdn|emoji|s\.w\.org/i', $src ) ) {
+				$count++;
+			}
 		}
 	}
+	// Galerías clásicas [gallery ids="1,2,3"] y galerías de Divi [et_pb_gallery gallery_ids="1,2,3"].
+	if ( preg_match_all( '/(?:\[gallery[^\]]*\sids|gallery_ids)=["\'\x{201D}\x{2033}]?([\d,\s]+)/u', $content, $m ) ) {
+		foreach ( $m[1] as $ids ) {
+			$count += count( array_filter( array_map( 'trim', explode( ',', $ids ) ) ) );
+		}
+	}
+	// Módulos de imagen de Divi.
+	$count += preg_match_all( '/\[et_pb_(?:fullwidth_)?image\s/', $content );
 	return $count;
 }
 
@@ -121,10 +143,10 @@ function amuma_logo() {
 		return;
 	}
 	printf(
-		'<a class="brand" href="%1$s" rel="home">%2$s<span class="brand__name">%3$s</span></a>',
+		'<a class="brand" href="%1$s" rel="home"><img class="brand__mark" src="%2$s" alt="" width="425" height="485"><span class="brand__text"><span class="brand__name">AMUMA</span><span class="brand__tag">%3$s</span></span></a>',
 		esc_url( home_url( '/' ) ),
-		amuma_ribbon_mini(), // phpcs:ignore WordPress.Security.EscapeOutput
-		esc_html( get_bloginfo( 'name' ) ? get_bloginfo( 'name' ) : 'AMUMA' )
+		esc_url( AMUMA_URI . '/assets/img/amuma-logo-mark.png' ),
+		esc_html__( 'Cáncer de mama y ginecológico · CLM', 'amuma' )
 	);
 }
 
@@ -158,6 +180,16 @@ function amuma_icon( $name ) {
 		'whatsapp'  => '<path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c.5 2.5 2.5 4.5 5 5l1.2-1.3 2 1-.5 1.5c-3.5.5-8-4-7.5-7.5l1.5-.5 1 2z"/>',
 		'link'      => '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
 		'close'     => '<path d="M6 6l12 12M18 6 6 18"/>',
+		'leaf'      => '<path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19c3-4 6-7 10-9"/>',
+		'sparkle'   => '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+		'foot'      => '<path d="M8 21c-2 0-3-2-3-5 0-4 1-8 4-8s3 3 3 6-1 7-4 7Z"/><circle cx="14" cy="4.5" r="1.5"/><circle cx="17.5" cy="6.5" r="1.2"/><circle cx="19.5" cy="9.5" r="1"/>',
+		'doc'       => '<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
+		'download'  => '<path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/>',
+		'copy'      => '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+		'check'     => '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+		'play'      => '<path d="M8 5.5v13l11-6.5z"/>',
+		'calendar'  => '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+		'euro'      => '<path d="M17 6.5A7 7 0 1 0 17 17.5M4 10h9M4 14h9"/>',
 		'chevron-l' => '<path d="m15 5-7 7 7 7"/>',
 		'chevron-r' => '<path d="m9 5 7 7-7 7"/>',
 	);
@@ -172,17 +204,26 @@ function amuma_icon( $name ) {
  */
 function amuma_menu_fallback() {
 	$items = array(
-		home_url( '/' )                => __( 'Inicio', 'amuma' ),
-		home_url( '/#quienes-somos' )  => __( 'Quiénes somos', 'amuma' ),
-		home_url( '/#que-hacemos' )    => __( 'Qué hacemos', 'amuma' ),
-		amuma_news_url()               => __( 'Actualidad', 'amuma' ),
-		home_url( '/#contacto' )       => __( 'Contacto', 'amuma' ),
+		array( home_url( '/' ), __( 'Inicio', 'amuma' ), is_front_page() ),
+		array( amuma_page_url( 'asociacion', '/#quienes-somos' ), __( 'Asociación', 'amuma' ), is_page( 'asociacion' ) ),
+		array( amuma_page_url( 'servicios', '/#que-hacemos' ), __( 'Servicios', 'amuma' ), is_page( 'servicios' ) ),
+		array( amuma_news_url(), __( 'Noticias', 'amuma' ), is_home() || is_singular( 'post' ) || is_category() ),
+		array( amuma_page_url( 'actividades', '/#actualidad' ), __( 'Actividades', 'amuma' ), is_page( 'actividades' ) ),
+		array( amuma_page_url( 'contacto', '/#contacto' ), __( 'Contacto', 'amuma' ), is_page( 'contacto' ) ),
 	);
 	echo '<ul class="menu">';
-	foreach ( $items as $url => $label ) {
-		printf( '<li class="menu-item"><a href="%s">%s</a></li>', esc_url( $url ), esc_html( $label ) );
+	foreach ( $items as $item ) {
+		printf( '<li class="menu-item%s"><a href="%s">%s</a></li>', $item[2] ? ' current-menu-item' : '', esc_url( $item[0] ), esc_html( $item[1] ) );
 	}
 	echo '</ul>';
+}
+
+/**
+ * URL de una página por su slug, o una alternativa si no existe.
+ */
+function amuma_page_url( $slug, $fallback = '/' ) {
+	$page = get_page_by_path( $slug );
+	return $page ? get_permalink( $page ) : home_url( $fallback );
 }
 
 /**
@@ -192,6 +233,10 @@ function amuma_news_url() {
 	$page_for_posts = (int) get_option( 'page_for_posts' );
 	if ( $page_for_posts ) {
 		return get_permalink( $page_for_posts );
+	}
+	$blog = get_page_by_path( 'blog' );
+	if ( $blog ) {
+		return get_permalink( $blog );
 	}
 	return home_url( '/?post_type=post' );
 }

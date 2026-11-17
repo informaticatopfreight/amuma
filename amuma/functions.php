@@ -7,12 +7,15 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AMUMA_VERSION', '1.0.0' );
+define( 'AMUMA_VERSION', '1.1.0' );
 define( 'AMUMA_DIR', get_template_directory() );
 define( 'AMUMA_URI', get_template_directory_uri() );
 
 require AMUMA_DIR . '/inc/customizer.php';
 require AMUMA_DIR . '/inc/template-tags.php';
+require AMUMA_DIR . '/inc/content.php';
+require AMUMA_DIR . '/inc/divi-compat.php';
+require AMUMA_DIR . '/inc/forms.php';
 
 /**
  * Configuración del tema.
@@ -65,40 +68,80 @@ function amuma_setup() {
 add_action( 'after_setup_theme', 'amuma_setup' );
 
 /**
- * Al activar el tema: crea las categorías "Noticias" y "Actividades" si no existen.
+ * Al activar el tema se ordena lo que venía de la web anterior (todo se puede cambiar después):
+ * - Categorías: "Acttividades" → "Actividades" y "Publicaciones" → "Noticias" (o se crean si no existen).
+ * - La página "Blog" pasa a ser el listado de noticias (Ajustes → Lectura) y se titula "Noticias y actividades".
+ * - Si la portada mostraba "las últimas entradas", se crea una portada fija.
+ * Se ejecuta una sola vez por versión.
  */
 function amuma_on_activation() {
-	foreach ( array( 'noticias' => 'Noticias', 'actividades' => 'Actividades' ) as $slug => $name ) {
-		if ( ! term_exists( $slug, 'category' ) ) {
+	if ( get_option( 'amuma_setup_done' ) === AMUMA_VERSION ) {
+		return;
+	}
+
+	$map = array(
+		'actividades' => array( 'Actividades', array( 'acttividades', 'actividad' ) ),
+		'noticias'    => array( 'Noticias', array( 'publicaciones', 'noticia' ) ),
+	);
+	foreach ( $map as $slug => $data ) {
+		list( $name, $old_slugs ) = $data;
+		if ( term_exists( $slug, 'category' ) ) {
+			continue;
+		}
+		$renamed = false;
+		foreach ( $old_slugs as $old ) {
+			$term = get_term_by( 'slug', $old, 'category' );
+			if ( $term ) {
+				wp_update_term( $term->term_id, 'category', array( 'name' => $name, 'slug' => $slug ) );
+				$renamed = true;
+				break;
+			}
+		}
+		if ( ! $renamed ) {
 			wp_insert_term( $name, 'category', array( 'slug' => $slug ) );
 		}
 	}
 
-	// Si la web muestra "las últimas entradas" en portada, se crea una portada fija
-	// y la página "Actualidad" para el listado de noticias (Ajustes → Lectura).
-	if ( 'posts' === get_option( 'show_on_front' ) ) {
-		$home = wp_insert_post(
+	// Listado de noticias.
+	if ( ! (int) get_option( 'page_for_posts' ) ) {
+		$news = get_page_by_path( 'blog' );
+		if ( ! $news ) {
+			$news = get_page_by_path( 'noticias-y-actividades' );
+		}
+		$news_id = $news ? $news->ID : wp_insert_post(
 			array(
-				'post_title'  => 'Inicio',
+				'post_title'  => 'Noticias y actividades',
+				'post_name'   => 'noticias-y-actividades',
 				'post_type'   => 'page',
 				'post_status' => 'publish',
 			)
 		);
-		$news = get_page_by_path( 'actualidad' );
-		$news = $news ? $news->ID : wp_insert_post(
-			array(
-				'post_title'  => 'Actualidad',
-				'post_name'   => 'actualidad',
-				'post_type'   => 'page',
-				'post_status' => 'publish',
-			)
-		);
-		if ( $home && ! is_wp_error( $home ) && $news && ! is_wp_error( $news ) ) {
-			update_option( 'show_on_front', 'page' );
-			update_option( 'page_on_front', $home );
-			update_option( 'page_for_posts', $news );
+		if ( $news && 'Blog' === $news->post_title ) {
+			wp_update_post( array( 'ID' => $news->ID, 'post_title' => 'Noticias y actividades' ) );
+		}
+		if ( $news_id && ! is_wp_error( $news_id ) ) {
+			update_option( 'page_for_posts', $news_id );
 		}
 	}
+
+	// Portada fija.
+	if ( 'posts' === get_option( 'show_on_front' ) || ! (int) get_option( 'page_on_front' ) ) {
+		$home    = get_page_by_path( 'inicio' );
+		$home_id = $home ? $home->ID : wp_insert_post(
+			array(
+				'post_title'  => 'Inicio',
+				'post_name'   => 'inicio',
+				'post_type'   => 'page',
+				'post_status' => 'publish',
+			)
+		);
+		if ( $home_id && ! is_wp_error( $home_id ) ) {
+			update_option( 'show_on_front', 'page' );
+			update_option( 'page_on_front', $home_id );
+		}
+	}
+
+	update_option( 'amuma_setup_done', AMUMA_VERSION );
 }
 add_action( 'after_switch_theme', 'amuma_on_activation' );
 
@@ -196,3 +239,20 @@ add_filter(
  * Títulos de archivo sin el prefijo "Categoría:".
  */
 add_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
+
+/**
+ * Enlaces de los botones: "/pagina/" → URL completa; "#seccion" → sección de la portada si no estamos en ella.
+ */
+function amuma_link( $url ) {
+	$url = trim( (string) $url );
+	if ( '' === $url ) {
+		return '';
+	}
+	if ( 0 === strpos( $url, '#' ) ) {
+		return is_front_page() ? $url : home_url( '/' . $url );
+	}
+	if ( 0 === strpos( $url, '/' ) && 0 !== strpos( $url, '//' ) ) {
+		return home_url( $url );
+	}
+	return $url;
+}

@@ -1,6 +1,6 @@
 # AMUMA · tema de WordPress
 
-Tema a medida para **AMUMA**, la Asociación de Mujeres Afectadas de Cáncer de Mama y Ginecológico de Castilla-La Mancha, con sede en Ciudad Real.
+Tema a medida para **AMUMA**, Asociación de Cáncer de Mama y Ginecológico de Castilla-La Mancha, con sede en Ciudad Real (Ronda de Calatrava 18).
 
 El lazo rosa es el protagonista: se dibuja solo al entrar, flota, gira al hacer scroll y aparece en el menú, en las tarjetas y en el pie. Los textos aparecen letra a letra y la cinta rosa de palabras se acelera al bajar por la página. Las noticias de la portada se recorren en horizontal y las fotos se abren a pantalla completa.
 
@@ -8,31 +8,45 @@ El lazo rosa es el protagonista: se dibuja solo al entrar, flota, gira al hacer 
 
 ---
 
-## 1. Instalación
+## 1. Cambiar amuma.org a este tema (paso a paso)
 
-1. Descarga el tema en `.zip`:
-   - desde GitHub → pestaña **Actions** → última ejecución de "Empaquetar tema" → artefacto **amuma-tema**, o
-   - en local: `./tools/build-zip.sh` (genera `amuma.zip`).
-2. En WordPress: **Apariencia → Temas → Añadir nuevo → Subir tema**, elige `amuma.zip` y **Activar**.
+La web actual usa **Divi**. El tema nuevo trae un "traductor" de Divi: las 133 noticias antiguas (con sus `[et_pb_…]`, galerías e imágenes) se ven limpias, con la galería en mosaico y el visor de fotos, **sin tocar la base de datos**. Si algo fuera mal, basta con volver a activar Divi y todo queda como estaba.
 
-Al activarlo, el tema:
+1. **Copia de seguridad**: ya tenéis *All-in-One WP Migration* instalado → Exportar → Archivo.
+2. Descarga `amuma.zip` (GitHub → **Actions** → "Empaquetar tema" → artefacto **amuma-tema**, o `./tools/build-zip.sh`).
+3. **Apariencia → Temas → Añadir nuevo → Subir tema** → `amuma.zip` → **Activar**.
+4. Si el plugin *Divi Builder* estuviera activo, desactívalo (el tema solo traduce Divi cuando Divi no está).
+5. Revisa la portada, una noticia antigua con galería y las páginas. Listo.
 
-- crea las categorías **Noticias** y **Actividades** si no existen;
-- si la portada mostraba "Tus últimas entradas", crea una página **Inicio** como portada y otra **Actualidad** para el listado de noticias (*Ajustes → Lectura*). Si ya tenías una portada fija, no toca nada. En ese caso, ve a *Ajustes → Lectura* y elige como "Página de entradas" la página donde quieras el listado.
+Al activarse, el tema hace estos ajustes **una sola vez**:
 
-> Prueba primero en una copia de la web (staging). Las entradas actuales se aprovechan tal cual: el tema coge solo la primera foto de cada noticia y cuenta las fotos.
+| Antes | Después |
+|---|---|
+| Categoría "Publicaciones" | **Noticias** (URL `/category/noticias/`) |
+| Categoría "Acttividades" (con errata) | **Actividades** (URL `/category/actividades/`) |
+| Página "Blog" (módulo de Divi) | Listado automático de noticias, titulado **Noticias y actividades** (sigue en `/blog/`) |
 
-## 2. Primeros ajustes (10 minutos)
+Las páginas **Asociación, Servicios, Hazte socio, Actividades y Contacto** tienen diseño propio y su contenido ya está metido en el tema (textos de amuma.org). Las **páginas legales** (aviso legal, privacidad, cookies) se muestran con su texto actual.
+
+## 2. Qué se edita y dónde
 
 | Qué | Dónde |
 |---|---|
-| **Logo** | Apariencia → Personalizar → Identidad del sitio → Logo. Mientras no haya logo, se ve el lazo con "AMUMA". |
-| **Textos de la portada** (título, botones, cifras, servicios, "Súmate al lazo") | Apariencia → Personalizar → **AMUMA** |
-| **Dirección, teléfonos, email, horario y redes sociales** | Apariencia → Personalizar → AMUMA → Contacto y redes |
-| **Menú** | Apariencia → Menús → crea un menú y asígnalo a "Menú principal" (y, si quieres, a "Menú del pie"). Puedes enlazar a secciones de la portada: `/#quienes-somos`, `/#que-hacemos`, `/#colabora`, `/#contacto`. |
-| **Política de privacidad** | Ajustes → Privacidad (sale en el pie automáticamente). |
+| **Noticias y actividades** | Entradas (ver punto 3) |
+| Portada: titular, botones, cifras, "Súmate al lazo" | Apariencia → Personalizar → **AMUMA** |
+| Dirección, teléfonos, email, horario, redes | Apariencia → Personalizar → AMUMA → **Contacto y redes** |
+| Junta directiva, servicios, cuotas e IBAN, misión, actividades fijas | `amuma/inc/content.php` (un solo archivo, ordenado por páginas) |
+| Logo | Ya va el de AMUMA. Para cambiarlo: Personalizar → Identidad del sitio → Logo |
+| Menú | Por defecto: Inicio · Asociación · Servicios · Noticias · Actividades · Contacto (+ botón "Hazte socia"). Si creas uno en Apariencia → Menús y lo asignas a "Menú principal", manda el tuyo. |
 
-⚠️ **Revisar con la asociación**: los datos de contacto vienen del directorio del SESCAM (C/ Alarcos 12, 926 21 65 79, 616 10 36 08, info@amuma.org). Los cuatro servicios de "Qué hacemos" y las tres cifras son textos de ejemplo. Todo se cambia desde el Personalizador.
+**Formularios**: el de contacto y el de alta de socia están en el tema (los de Divi desaparecen al cambiar). Llegan a `info@amuma.org`. Recomendado instalar **WP Mail SMTP** para que no acaben en spam. Llevan protección antispam sin captcha. También se pueden poner en cualquier página con `[amuma_contacto]` o `[amuma_socio]`.
+
+**Mapa**: OpenStreetMap, que no usa cookies, así que no necesita aviso de cookies.
+
+⚠️ **Revisar con la asociación**:
+- El **aviso legal** antiguo dice "Calle Calatrava 3, 13001", cuando la sede actual es Ronda de Calatrava 18, 13003. Conviene actualizarlo (Páginas → Aviso legal).
+- El **horario** (lunes a viernes, de 9 a 13 h) sale del cartel de *Tejiendo por la vida*. Hay que confirmarlo.
+- La página **Actividades** antigua tenía eventos de 2022-2023. El diseño nuevo muestra las actividades fijas, el proyecto *Tejiendo por la vida* (con su vídeo) y las últimas noticias, que se actualizan solas.
 
 ## 3. Publicar una noticia o actividad (lo que harán cada mes)
 
@@ -67,6 +81,11 @@ amuma/                     ← el tema (esta carpeta es la que va en el .zip)
 ├── functions.php          ← configuración, scripts, categorías al activar
 ├── inc/customizer.php     ← textos editables (Apariencia → Personalizar → AMUMA)
 ├── inc/template-tags.php  ← funciones de apoyo (imagen automática, iconos, menú…)
+├── inc/content.php        ← textos de Asociación, Servicios, Hazte socio, Actividades, Contacto
+├── inc/divi-compat.php    ← traduce el contenido antiguo de Divi
+├── inc/forms.php          ← formularios de contacto y alta de socia
+├── page-asociacion.php, page-servicios.php, page-hazte-socio.php,
+│   page-actividades.php, page-contacto.php   ← páginas con diseño propio (por su URL)
 ├── front-page.php         ← portada
 ├── home.php / archive.php / search.php → template-parts/listing.php   ← Actualidad
 ├── single.php             ← noticia

@@ -147,6 +147,23 @@
 			heroMouse();
 		}
 
+		// Fotos reales que flotan alrededor del lazo
+		var bubbles = $$('[data-bubble]');
+		if (bubbles.length) {
+			gsap.from(bubbles, { scale: 0, autoAlpha: 0, duration: 1.4, stagger: 0.15, delay: 0.9, ease: 'back.out(1.6)' });
+			bubbles.forEach(function (b, i) {
+				gsap.to(b, { y: i % 2 ? 12 : -12, x: i % 2 ? -6 : 6, duration: 3 + i * 0.6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 2 + i * 0.3 });
+			});
+			if (window.matchMedia('(pointer: fine)').matches) {
+				var tos = bubbles.map(function (b) { return { x: gsap.quickTo(b, 'xPercent', { duration: 1.4, ease: 'power3.out' }), y: gsap.quickTo(b, 'yPercent', { duration: 1.4, ease: 'power3.out' }) }; });
+				window.addEventListener('mousemove', function (e) {
+					var nx = e.clientX / window.innerWidth - 0.5;
+					var ny = e.clientY / window.innerHeight - 0.5;
+					tos.forEach(function (t, i) { var d = (i + 1) * 14; t.x(nx * d); t.y(ny * d); });
+				});
+			}
+		}
+
 		// Lazos decorativos de páginas interiores
 		$$('.ribbon--page').forEach(function (svg) {
 			drawRibbon(svg, { delay: 0.3, duration: 1.4 });
@@ -211,7 +228,7 @@
 			});
 			// Las palabras clave en rosa
 			s.words.forEach(function (w) {
-				if (/^(acompañamos|escuchamos|informamos|sola)/i.test(w.textContent.trim())) w.style.color = 'var(--pink)';
+				if (/^(compartir|informar|acompañamos|escuchamos|informamos|reivindicar|sensibilizar|sola)/i.test(w.textContent.trim())) w.style.color = 'var(--pink)';
 			});
 		});
 
@@ -219,8 +236,8 @@
 		$$('[data-count]').forEach(function (el) {
 			var end = parseFloat(el.getAttribute('data-count'));
 			if (isNaN(end)) return;
-			var obj = { v: 0 };
-			el.textContent = '0';
+			var obj = { v: end > 1000 ? end - 40 : 0 };
+			el.textContent = String(obj.v);
 			gsap.to(obj, {
 				v: end, duration: 2.2, ease: 'power2.out',
 				scrollTrigger: { trigger: el, start: 'top 90%', once: true },

@@ -52,8 +52,8 @@
 			</div>
 		</nav>
 
-		<a class="btn btn--pink btn--sm site-header__cta" data-magnetic href="<?php echo esc_url( amuma_opt( 'hero_btn2_url' ) === '#colabora' ? home_url( '/#colabora' ) : amuma_opt( 'hero_btn2_url' ) ); ?>">
-			<span><?php echo esc_html( amuma_opt( 'hero_btn2' ) ); ?></span>
+		<a class="btn btn--pink btn--sm site-header__cta" data-magnetic href="<?php echo esc_url( amuma_page_url( 'hazte-socio', '/#colabora' ) ); ?>">
+			<span><?php esc_html_e( 'Hazte socia', 'amuma' ); ?></span>
 		</a>
 
 		<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
