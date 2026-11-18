@@ -207,8 +207,7 @@ function amuma_menu_fallback() {
 		array( home_url( '/' ), __( 'Inicio', 'amuma' ), is_front_page() ),
 		array( amuma_page_url( 'asociacion', '/#quienes-somos' ), __( 'Asociación', 'amuma' ), is_page( 'asociacion' ) ),
 		array( amuma_page_url( 'servicios', '/#que-hacemos' ), __( 'Servicios', 'amuma' ), is_page( 'servicios' ) ),
-		array( amuma_news_url(), __( 'Noticias', 'amuma' ), is_home() || is_singular( 'post' ) || is_category() ),
-		array( amuma_page_url( 'actividades', '/#actualidad' ), __( 'Actividades', 'amuma' ), is_page( 'actividades' ) ),
+		array( amuma_news_url(), __( 'Actualidad', 'amuma' ), is_home() || is_singular( 'post' ) || is_category() || is_page( 'actividades' ) ),
 		array( amuma_page_url( 'contacto', '/#contacto' ), __( 'Contacto', 'amuma' ), is_page( 'contacto' ) ),
 	);
 	echo '<ul class="menu">';

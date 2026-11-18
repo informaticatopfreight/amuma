@@ -37,6 +37,15 @@ $amuma_cats    = get_categories(
 				<?php endforeach; ?>
 			</nav>
 		<?php endif; ?>
+
+		<?php $amuma_acts = get_page_by_path( 'actividades' ); ?>
+		<?php if ( $amuma_acts && ! is_search() ) : ?>
+			<a class="yearly" href="<?php echo esc_url( get_permalink( $amuma_acts ) ); ?>" data-fade>
+				<?php echo amuma_ribbon_mini(); // phpcs:ignore ?>
+				<span><strong><?php esc_html_e( 'Nuestras citas de cada año', 'amuma' ); ?></strong> <?php esc_html_e( 'Carrera Rosa, Cuestación, Mercadillo solidario y Tejiendo por la vida', 'amuma' ); ?></span>
+				<?php echo amuma_icon( 'arrow' ); // phpcs:ignore ?>
+			</a>
+		<?php endif; ?>
 	</div>
 </section>
 

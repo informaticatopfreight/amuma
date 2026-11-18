@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AMUMA_VERSION', '1.1.0' );
+define( 'AMUMA_VERSION', '1.2.0' );
 define( 'AMUMA_DIR', get_template_directory() );
 define( 'AMUMA_URI', get_template_directory_uri() );
 
@@ -70,7 +70,7 @@ add_action( 'after_setup_theme', 'amuma_setup' );
 /**
  * Al activar el tema se ordena lo que venía de la web anterior (todo se puede cambiar después):
  * - Categorías: "Acttividades" → "Actividades" y "Publicaciones" → "Noticias" (o se crean si no existen).
- * - La página "Blog" pasa a ser el listado de noticias (Ajustes → Lectura) y se titula "Noticias y actividades".
+ * - La página "Blog" pasa a ser el listado de noticias (Ajustes → Lectura) y se titula "Actualidad".
  * - Si la portada mostraba "las últimas entradas", se crea una portada fija.
  * Se ejecuta una sola vez por versión.
  */
@@ -106,18 +106,18 @@ function amuma_on_activation() {
 	if ( ! (int) get_option( 'page_for_posts' ) ) {
 		$news = get_page_by_path( 'blog' );
 		if ( ! $news ) {
-			$news = get_page_by_path( 'noticias-y-actividades' );
+			$news = get_page_by_path( 'actualidad' );
 		}
 		$news_id = $news ? $news->ID : wp_insert_post(
 			array(
-				'post_title'  => 'Noticias y actividades',
-				'post_name'   => 'noticias-y-actividades',
+				'post_title'  => 'Actualidad',
+				'post_name'   => 'actualidad',
 				'post_type'   => 'page',
 				'post_status' => 'publish',
 			)
 		);
 		if ( $news && 'Blog' === $news->post_title ) {
-			wp_update_post( array( 'ID' => $news->ID, 'post_title' => 'Noticias y actividades' ) );
+			wp_update_post( array( 'ID' => $news->ID, 'post_title' => 'Actualidad' ) );
 		}
 		if ( $news_id && ! is_wp_error( $news_id ) ) {
 			update_option( 'page_for_posts', $news_id );

@@ -32,7 +32,7 @@ $amuma_news = new WP_Query(
 		<div class="hero__visual" data-hero-visual>
 			<div class="hero__halo" aria-hidden="true"></div>
 			<?php
-			$amuma_bubbles = array_filter( array_map( 'amuma_upload_url', array( '2021/03/CarreraRosa5.jpg', '2021/03/10.jpg', '2021/03/Alfombra2.jpg' ) ) );
+			$amuma_bubbles = array_filter( array_map( 'amuma_upload_url', array( '2021/03/women-fighting-breast-cancer.jpg', '2021/03/breast-cancer-woman-in-white-t-shirt-with-satin-pink-ribbon-on-her-chest-symbol-for-breast-cancer-awareness-e1614840285831.jpg' ) ) );
 			foreach ( array_values( $amuma_bubbles ) as $amuma_b => $amuma_src ) :
 				?>
 				<span class="hero__bubble hero__bubble--<?php echo (int) $amuma_b + 1; ?>" aria-hidden="true" data-bubble><img src="<?php echo esc_url( $amuma_src ); ?>" alt=""></span>
@@ -88,15 +88,23 @@ $amuma_news = new WP_Query(
 		<div class="section__head">
 			<p class="kicker" data-fade><?php esc_html_e( 'Servicios', 'amuma' ); ?></p>
 			<h2 class="section__title" data-split><?php echo esc_html( amuma_opt( 'services_title' ) ); ?></h2>
+			<p class="section__lead" data-fade><?php echo esc_html( amuma_content( 'servicios' )['intro'] ); ?></p>
 		</div>
 		<div class="services__grid">
 			<?php foreach ( amuma_content( 'servicios' )['lista'] as $amuma_i => $amuma_s ) : ?>
-				<a class="service" data-reveal data-tilt href="<?php echo esc_url( amuma_page_url( 'servicios', '/' ) . '#' . $amuma_s['slug'] ); ?>">
-					<span class="service__num"><?php echo esc_html( sprintf( '%02d', $amuma_i + 1 ) ); ?></span>
-					<span class="service__icon"><?php echo amuma_icon( $amuma_s['icon'] ); // phpcs:ignore ?></span>
-					<h3 class="service__title"><?php echo esc_html( $amuma_s['title'] ); ?></h3>
-					<p class="service__text"><?php echo esc_html( $amuma_s['short'] ); ?></p>
-					<span class="service__more"><?php esc_html_e( 'Saber más', 'amuma' ); ?> <?php echo amuma_icon( 'arrow' ); // phpcs:ignore ?></span>
+				<?php $amuma_img = amuma_upload_url( $amuma_s['img'] ); ?>
+				<a class="service" data-reveal href="<?php echo esc_url( amuma_page_url( 'servicios', '/' ) . '#' . $amuma_s['slug'] ); ?>">
+					<span class="service__media">
+						<?php if ( $amuma_img ) : ?>
+							<img src="<?php echo esc_url( $amuma_img ); ?>" alt="" loading="lazy">
+						<?php endif; ?>
+						<span class="service__icon"><?php echo amuma_icon( $amuma_s['icon'] ); // phpcs:ignore ?></span>
+					</span>
+					<span class="service__body">
+						<h3 class="service__title"><?php echo esc_html( $amuma_s['title'] ); ?></h3>
+						<p class="service__text"><?php echo esc_html( $amuma_s['short'] ); ?></p>
+						<span class="service__more"><?php esc_html_e( 'Saber más', 'amuma' ); ?> <?php echo amuma_icon( 'arrow' ); // phpcs:ignore ?></span>
+					</span>
 				</a>
 			<?php endforeach; ?>
 		</div>
@@ -109,7 +117,7 @@ $amuma_news = new WP_Query(
 	<div class="news-reel__pin">
 		<div class="container news-reel__head">
 			<div>
-				<p class="kicker" data-fade><?php esc_html_e( 'Noticias y actividades', 'amuma' ); ?></p>
+				<p class="kicker" data-fade><?php esc_html_e( 'Actualidad', 'amuma' ); ?></p>
 				<h2 class="section__title" data-split><?php esc_html_e( 'Lo último', 'amuma' ); ?></h2>
 			</div>
 			<a class="btn btn--ghost" data-magnetic href="<?php echo esc_url( amuma_news_url() ); ?>"><span><?php esc_html_e( 'Ver todas', 'amuma' ); ?></span><?php echo amuma_icon( 'arrow' ); // phpcs:ignore ?></a>

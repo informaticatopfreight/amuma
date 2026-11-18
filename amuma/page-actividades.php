@@ -20,7 +20,7 @@ get_template_part(
 	'template-parts/page-hero',
 	null,
 	array(
-		'kicker' => __( 'Actividades', 'amuma' ),
+		'kicker' => __( 'Actualidad · Actividades', 'amuma' ),
 		'title'  => __( 'Nos movemos juntas', 'amuma' ),
 		'intro'  => $c['intro'],
 	)

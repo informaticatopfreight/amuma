@@ -18,9 +18,34 @@ function amuma_upload_url( $relative ) {
 	if ( ! $relative ) {
 		return '';
 	}
-	$up = wp_get_upload_dir();
-	if ( ! file_exists( trailingslashit( $up['basedir'] ) . $relative ) ) {
-		return '';
+	// Imágenes incluidas en el propio tema (assets/img).
+	if ( 0 === strpos( $relative, 'theme/' ) ) {
+		return AMUMA_URI . '/assets/img/' . substr( $relative, 6 );
+	}
+	$up   = wp_get_upload_dir();
+	$base = trailingslashit( $up['basedir'] );
+	if ( ! file_exists( $base . $relative ) ) {
+		// Nombres con tildes: en el servidor pueden estar guardados como "i + acento" (Unicode NFD).
+		$found = '';
+		if ( class_exists( 'Normalizer' ) ) {
+			foreach ( array( Normalizer::FORM_D, Normalizer::FORM_C ) as $form ) {
+				$alt = Normalizer::normalize( $relative, $form );
+				if ( $alt && file_exists( $base . $alt ) ) {
+					$found = $alt;
+					break;
+				}
+			}
+		}
+		if ( ! $found ) {
+			$decomposed = strtr( $relative, array( 'á' => "a\u{301}", 'é' => "e\u{301}", 'í' => "i\u{301}", 'ó' => "o\u{301}", 'ú' => "u\u{301}", 'ñ' => "n\u{303}" ) );
+			if ( file_exists( $base . $decomposed ) ) {
+				$found = $decomposed;
+			}
+		}
+		if ( ! $found ) {
+			return '';
+		}
+		$relative = $found;
 	}
 	return trailingslashit( $up['baseurl'] ) . str_replace( '%2F', '/', rawurlencode( $relative ) );
 }
@@ -143,8 +168,8 @@ function amuma_content( $section = null ) {
 				),
 				'kit'   => array(
 					array( 'Cojín con forma de corazón', 'Ayuda a prevenir el linfedema y alivia la zona tras la operación.', '2021/03/Cojín-2.jpg' ),
-					array( 'Pelota ortopédica', 'Para hacer ejercicios con la mano y recuperar movilidad.', '' ),
-					array( 'Prótesis provisional', 'Para las personas mastectomizadas, mientras llega la definitiva.', '' ),
+					array( 'Pelota ortopédica', 'Para hacer ejercicios con la mano y recuperar movilidad.', 'theme/kit-pelota.jpg' ),
+					array( 'Prótesis provisional', 'Para las personas mastectomizadas, mientras llega la definitiva.', 'theme/kit-protesis.jpg' ),
 					array( 'Turbante oncológico', 'De regalo, si ya has empezado la quimioterapia.', '2021/03/Turbante-2.jpg' ),
 				),
 			),
