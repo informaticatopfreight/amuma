@@ -9,7 +9,6 @@ get_header();
 
 while ( have_posts() ) :
 	the_post();
-	$amuma_cat   = amuma_primary_category();
 	$amuma_url   = rawurlencode( get_permalink() );
 	$amuma_title = rawurlencode( get_the_title() );
 	?>
@@ -19,9 +18,6 @@ while ( have_posts() ) :
 			<div class="container container--narrow">
 				<a class="back" href="<?php echo esc_url( amuma_news_url() ); ?>" data-fade><?php echo amuma_icon( 'chevron-l' ); // phpcs:ignore ?> <?php esc_html_e( 'Actualidad', 'amuma' ); ?></a>
 				<div class="single__meta" data-fade>
-					<?php if ( $amuma_cat ) : ?>
-						<a class="pill pill--<?php echo esc_attr( $amuma_cat->slug ); ?>" href="<?php echo esc_url( get_category_link( $amuma_cat ) ); ?>"><?php echo esc_html( $amuma_cat->name ); ?></a>
-					<?php endif; ?>
 					<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
 					<?php $amuma_photos = amuma_photo_count(); ?>
 					<?php if ( $amuma_photos > 1 ) : ?>
@@ -87,7 +83,6 @@ while ( have_posts() ) :
 		array(
 			'posts_per_page'      => 3,
 			'post__not_in'        => array( get_the_ID() ),
-			'cat'                 => $amuma_cat ? $amuma_cat->term_id : 0,
 			'ignore_sticky_posts' => true,
 			'no_found_rows'       => true,
 		)

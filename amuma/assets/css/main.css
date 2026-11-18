@@ -1696,3 +1696,6 @@ input[type="submit"]:hover, button[type="submit"]:hover { background: var(--plum
 .yearly:hover { background: var(--pink); color: #fff; }
 .yearly:hover strong, .yearly:hover .ribbon-mini { color: #fff; }
 .yearly:hover .icon { transform: translateX(4px); }
+
+/* Actualidad sin filtros */
+.page-hero--news .yearly { margin-top: clamp(24px, 3vw, 36px); }

@@ -54,19 +54,19 @@ Las páginas **Asociación, Servicios, Hazte socio, Actividades y Contacto** tie
 2. Escribe el **título** y el texto.
 3. Para las fotos, añade un bloque **Galería** (botón `+` → Galería) y selecciona todas las fotos de una vez. El tema las monta en mosaico y se abren a pantalla completa al pulsarlas, con flechas y deslizando el dedo en el móvil.
 4. A la derecha:
-   - **Categoría**: *Noticias* o *Actividades*.
+   - **Categoría**: no hace falta elegirla. En la web todo sale junto en **Actualidad**.
    - **Imagen destacada**: la foto de portada. Es opcional: si no la ponen, el tema usa la primera foto de la noticia.
    - **Extracto** (opcional): frase corta que sale bajo el título.
 5. **Publicar**.
 
-No hay que tocar nada más: la noticia aparece en el carrusel de la portada, en *Actualidad* (con filtros por categoría y botón "Ver más") y en "También te puede interesar".
+No hay que tocar nada más: la noticia aparece en el carrusel de la portada, en *Actualidad* (con botón "Ver más") y en "También te puede interesar".
 
 **Consejo**: subid las fotos a un tamaño razonable (unos 2000 px de lado como máximo). WordPress crea solo los tamaños más pequeños.
 
 ## 4. Qué incluye
 
 - **Portada**: intro con el lazo dibujándose (solo la primera vez por visita), titular animado, lazo 3D que sigue al ratón, cinta de palabras que reacciona al scroll, "Quiénes somos" con el texto que se ilumina al leer, cifras con contador, servicios con efecto de inclinación, **Actualidad en carrusel horizontal**, "Súmate al lazo" y contacto.
-- **Actualidad** (listado): noticia destacada grande, rejilla tipo revista, filtros *Todo / Actividades / Noticias* y "Ver más" sin recargar la página.
+- **Actualidad** (listado): noticia destacada grande, rejilla tipo revista, acceso a las citas de cada año y "Ver más" sin recargar la página.
 - **Noticia**: cabecera grande, foto que se abre al entrar, galería en mosaico con visor a pantalla completa, botones para compartir (WhatsApp, Facebook, X, copiar enlace), anterior/siguiente y relacionadas.
 - **Páginas** (Quiénes somos, Contacto, Aviso legal…) con el mismo estilo.
 - **Accesibilidad**: si el sistema pide reducir el movimiento, la web se ve sin animaciones. Si el JavaScript falla, el contenido se muestra igualmente.

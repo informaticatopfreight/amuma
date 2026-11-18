@@ -7,7 +7,6 @@
  */
 
 $amuma_variant = isset( $args['variant'] ) ? $args['variant'] : 'grid';
-$amuma_cat     = amuma_primary_category();
 $amuma_photos  = amuma_photo_count();
 $amuma_size    = 'featured' === $amuma_variant ? 'amuma-wide' : 'amuma-card';
 ?>
@@ -23,9 +22,6 @@ $amuma_size    = 'featured' === $amuma_variant ? 'amuma-wide' : 'amuma-card';
 		</div>
 		<div class="card__body">
 			<div class="card__meta">
-				<?php if ( $amuma_cat ) : ?>
-					<span class="pill pill--<?php echo esc_attr( $amuma_cat->slug ); ?>"><?php echo esc_html( $amuma_cat->name ); ?></span>
-				<?php endif; ?>
 				<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date( 'j M Y' ) ); ?></time>
 			</div>
 			<h3 class="card__title"><span><?php the_title(); ?></span></h3>
