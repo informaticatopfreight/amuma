@@ -28,7 +28,6 @@
 	initLightbox();
 	initLoadMore();
 	initCopy();
-	initMap();
 
 	if (!hasGsap || reduced) {
 		$$('.loader').forEach(function (l) { l.classList.add('is-done'); });
@@ -598,22 +597,6 @@
 					}
 				})
 				.catch(function () { window.location.href = btn.href; });
-		});
-	}
-
-	function initMap() {
-		$$('[data-map]').forEach(function (box) {
-			var btn = box.querySelector('[data-map-load]');
-			if (!btn) return;
-			btn.addEventListener('click', function () {
-				var f = document.createElement('iframe');
-				f.src = box.getAttribute('data-src');
-				f.title = 'Mapa: sede de AMUMA en Ciudad Real';
-				f.loading = 'lazy';
-				f.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-				box.appendChild(f);
-				box.classList.add('is-loaded');
-			});
 		});
 	}
 
