@@ -118,7 +118,7 @@ $amuma_news = new WP_Query(
 		<div class="container news-reel__head">
 			<div>
 				<p class="kicker" data-fade><?php esc_html_e( 'Actualidad', 'amuma' ); ?></p>
-				<h2 class="section__title" data-split><?php esc_html_e( 'Lo último', 'amuma' ); ?></h2>
+				<h2 class="section__title" data-split><?php esc_html_e( 'Noticias', 'amuma' ); ?></h2>
 			</div>
 			<a class="btn btn--ghost" data-magnetic href="<?php echo esc_url( amuma_news_url() ); ?>"><span><?php esc_html_e( 'Ver todas', 'amuma' ); ?></span><?php echo amuma_icon( 'arrow' ); // phpcs:ignore ?></a>
 		</div>

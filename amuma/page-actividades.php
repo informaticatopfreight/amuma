@@ -99,7 +99,7 @@ if ( $amuma_video || $amuma_poster ) :
 			<div class="section__head section__head--row">
 				<div>
 					<p class="kicker" data-fade><?php esc_html_e( 'Lo último', 'amuma' ); ?></p>
-					<h2 class="section__title section__title--sm" data-split><?php esc_html_e( 'Lo último en AMUMA', 'amuma' ); ?></h2>
+					<h2 class="section__title section__title--sm" data-split><?php esc_html_e( 'Últimas noticias', 'amuma' ); ?></h2>
 				</div>
 				<a class="btn btn--ghost" data-magnetic href="<?php echo esc_url( amuma_news_url() ); ?>"><span><?php esc_html_e( 'Ver todas', 'amuma' ); ?></span><?php echo amuma_icon( 'arrow' ); // phpcs:ignore ?></a>
 			</div>
