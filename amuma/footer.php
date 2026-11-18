@@ -14,9 +14,6 @@
 	<div class="container">
 		<div class="site-footer__top">
 			<p class="site-footer__claim" data-split><?php esc_html_e( 'Estamos aquí para ti.', 'amuma' ); ?></p>
-			<a class="btn btn--light" data-magnetic href="mailto:<?php echo esc_attr( antispambot( amuma_opt( 'email' ) ) ); ?>">
-				<span><?php esc_html_e( 'Escríbenos', 'amuma' ); ?></span><?php echo amuma_icon( 'arrow' ); // phpcs:ignore ?>
-			</a>
 		</div>
 
 		<div class="site-footer__grid">

@@ -864,16 +864,16 @@ a.contact__card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -20
 	justify-content: space-between;
 	gap: 32px;
 	flex-wrap: wrap;
-	padding-bottom: clamp(48px, 6vw, 80px);
+	padding-bottom: clamp(32px, 4vw, 48px);
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 .site-footer__claim {
 	font-family: var(--serif);
-	font-size: clamp(2.4rem, 1.2rem + 4.6vw, 5.6rem);
-	line-height: 1;
-	letter-spacing: -0.03em;
+	font-size: clamp(1.8rem, 1.2rem + 2vw, 3rem);
+	line-height: 1.05;
+	letter-spacing: -0.02em;
 	margin: 0;
-	max-width: 12ch;
+	max-width: none;
 }
 .site-footer__grid {
 	display: grid;
