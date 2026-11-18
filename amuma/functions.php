@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AMUMA_VERSION', '1.2.0' );
+define( 'AMUMA_VERSION', '1.3.0' );
 define( 'AMUMA_DIR', get_template_directory() );
 define( 'AMUMA_URI', get_template_directory_uri() );
 
@@ -141,7 +141,71 @@ function amuma_on_activation() {
 		}
 	}
 
+	amuma_create_pages();
+
 	update_option( 'amuma_setup_done', AMUMA_VERSION );
+}
+
+/**
+ * Crea las páginas que usa el tema si no existen (útil en un WordPress recién instalado).
+ * Las de Asociación, Servicios, Hazte socio, Actividades y Contacto tienen diseño propio:
+ * basta con que existan con esa dirección (slug). Las legales llevan el texto de amuma.org.
+ */
+function amuma_create_pages() {
+	$pages = array(
+		'asociacion'          => array( 'Asociación', '' ),
+		'servicios'           => array( 'Servicios', '' ),
+		'hazte-socio'         => array( 'Hazte socio/a', '' ),
+		'actividades'         => array( 'Actividades', '' ),
+		'contacto'            => array( 'Contacto', '' ),
+		'aviso-legal'         => array( 'Aviso legal', 'aviso-legal.html' ),
+		'politica-privacidad' => array( 'Política de privacidad', 'politica-privacidad.html' ),
+		'politica-de-cookies' => array( 'Política de cookies', 'politica-de-cookies.html' ),
+	);
+	foreach ( $pages as $slug => $page ) {
+		if ( get_page_by_path( $slug ) ) {
+			continue;
+		}
+		$content = '';
+		if ( $page[1] && file_exists( AMUMA_DIR . '/inc/legal/' . $page[1] ) ) {
+			$content = file_get_contents( AMUMA_DIR . '/inc/legal/' . $page[1] ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		}
+		wp_insert_post(
+			array(
+				'post_title'   => $page[0],
+				'post_name'    => $slug,
+				'post_type'    => 'page',
+				'post_status'  => 'publish',
+				'post_content' => $content,
+			)
+		);
+	}
+
+	// Página de privacidad: la nuestra en lugar del borrador que crea WordPress.
+	$privacy = get_page_by_path( 'politica-privacidad' );
+	$current = get_post( (int) get_option( 'wp_page_for_privacy_policy' ) );
+	if ( $privacy && ( ! $current || 'publish' !== $current->post_status ) ) {
+		update_option( 'wp_page_for_privacy_policy', $privacy->ID );
+		if ( $current && 'draft' === $current->post_status && $current->ID !== $privacy->ID ) {
+			wp_delete_post( $current->ID, true );
+		}
+	}
+
+	// Contenido de ejemplo de una instalación nueva ("Hola mundo" y "Página de ejemplo"), si no se ha tocado.
+	foreach ( array( array( 'post', array( 'hola-mundo', 'hello-world' ) ), array( 'page', array( 'pagina-ejemplo', 'sample-page' ) ) ) as $sample ) {
+		foreach ( $sample[1] as $slug ) {
+			$found = get_posts( array( 'name' => $slug, 'post_type' => $sample[0], 'post_status' => 'any', 'numberposts' => 1 ) );
+			if ( $found && $found[0]->post_modified === $found[0]->post_date ) {
+				wp_delete_post( $found[0]->ID, true );
+			}
+		}
+	}
+
+	// Enlaces permanentes bonitos (/asociacion/ en lugar de /?page_id=5).
+	if ( ! get_option( 'permalink_structure' ) ) {
+		update_option( 'permalink_structure', '/%postname%/' );
+	}
+	flush_rewrite_rules();
 }
 add_action( 'after_switch_theme', 'amuma_on_activation' );
 

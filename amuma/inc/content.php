@@ -43,11 +43,26 @@ function amuma_upload_url( $relative ) {
 			}
 		}
 		if ( ! $found ) {
-			return '';
+			return amuma_bundled_url( $relative );
 		}
 		$relative = $found;
 	}
 	return trailingslashit( $up['baseurl'] ) . str_replace( '%2F', '/', rawurlencode( $relative ) );
+}
+
+/**
+ * Copia de la imagen incluida en el tema (assets/content), para instalaciones nuevas
+ * en las que todavía no están las fotos de amuma.org. Nombres sin tildes.
+ */
+function amuma_bundled_url( $relative ) {
+	if ( class_exists( 'Normalizer' ) ) {
+		$relative = Normalizer::normalize( $relative, Normalizer::FORM_C );
+	}
+	$plain = remove_accents( $relative );
+	if ( file_exists( AMUMA_DIR . '/assets/content/' . $plain ) ) {
+		return AMUMA_URI . '/assets/content/' . str_replace( '%2F', '/', rawurlencode( $plain ) );
+	}
+	return '';
 }
 
 /**

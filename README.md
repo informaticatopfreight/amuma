@@ -8,6 +8,22 @@ El lazo rosa es el protagonista: se dibuja solo al entrar, flota, gira al hacer 
 
 ---
 
+## 0. Instalar en un WordPress nuevo (por ejemplo, nuevaweb.amuma.org)
+
+No hace falta copiar amuma.org. El tema lleva dentro las fotos de las páginas (equipo, servicios, kit…), la ficha de inscripción y los textos legales.
+
+1. En IONOS, apunta el subdominio a una carpeta vacía, activa el SSL e instala WordPress en él.
+2. **Apariencia → Temas → Añadir nuevo → Subir tema** → `amuma.zip` → **Activar**.
+3. Al activarse, el tema crea solo:
+   - las páginas **Inicio** (portada), **Actualidad** (listado de noticias), **Asociación**, **Servicios**, **Hazte socio/a**, **Actividades** y **Contacto**;
+   - **Aviso legal**, **Política de privacidad** y **Política de cookies**, con el texto de amuma.org;
+   - enlaces permanentes del tipo `/asociacion/`.
+   Además borra "Hola mundo" y la página de ejemplo de WordPress (solo si no se han tocado).
+4. En **Ajustes → Lectura**, marca "Disuadir a los motores de búsqueda" mientras sea la web de pruebas.
+5. Publica noticias en **Entradas → Añadir nueva** y saldrán solas en la portada y en Actualidad.
+
+**Traer las noticias antiguas (opcional)**: en amuma.org → Herramientas → Exportar → solo **Entradas**. En la web nueva → Herramientas → Importar → WordPress → sube el archivo y marca "Descargar e importar archivos adjuntos". El tema entiende el formato Divi de esas noticias.
+
 ## 1. Cambiar amuma.org a este tema (paso a paso)
 
 La web actual usa **Divi**. El tema nuevo trae un "traductor" de Divi: las 133 noticias antiguas (con sus `[et_pb_…]`, galerías e imágenes) se ven limpias, con la galería en mosaico y el visor de fotos, **sin tocar la base de datos**. Si algo fuera mal, basta con volver a activar Divi y todo queda como estaba.
@@ -84,6 +100,8 @@ amuma/                     ← el tema (esta carpeta es la que va en el .zip)
 ├── inc/content.php        ← textos de Asociación, Servicios, Hazte socio, Actividades, Contacto
 ├── inc/divi-compat.php    ← traduce el contenido antiguo de Divi
 ├── inc/forms.php          ← formularios de contacto y alta de socia
+├── inc/legal/             ← textos legales que se crean al activar en un WordPress nuevo
+├── assets/content/        ← fotos de las páginas (se usan si no están en la biblioteca de medios)
 ├── page-asociacion.php, page-servicios.php, page-hazte-socio.php,
 │   page-actividades.php, page-contacto.php   ← páginas con diseño propio (por su URL)
 ├── front-page.php         ← portada
