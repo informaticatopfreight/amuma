@@ -41,7 +41,7 @@ Las páginas **Asociación, Servicios, Hazte socio, Actividades y Contacto** tie
 
 **Formularios**: el de contacto y el de alta de socia están en el tema (los de Divi desaparecen al cambiar). Llegan a `info@amuma.org`. Recomendado instalar **WP Mail SMTP** para que no acaben en spam. Llevan protección antispam sin captcha. También se pueden poner en cualquier página con `[amuma_contacto]` o `[amuma_socio]`.
 
-**Mapa**: OpenStreetMap, que no usa cookies, así que no necesita aviso de cookies.
+**Mapa**: se ve una ilustración con la sede. El mapa de Google Maps solo se carga cuando alguien pulsa "Ver mapa", así no se cargan cookies de Google sin pedirlo.
 
 ⚠️ **Revisar con la asociación**:
 - El **aviso legal** antiguo dice "Calle Calatrava 3, 13001", cuando la sede actual es Ronda de Calatrava 18, 13003. Conviene actualizarlo (Páginas → Aviso legal).
