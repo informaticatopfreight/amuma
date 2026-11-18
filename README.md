@@ -22,7 +22,18 @@ No hace falta copiar amuma.org. El tema lleva dentro las fotos de las páginas (
 4. En **Ajustes → Lectura**, marca "Disuadir a los motores de búsqueda" mientras sea la web de pruebas.
 5. Publica noticias en **Entradas → Añadir nueva** y saldrán solas en la portada y en Actualidad.
 
-**Traer las noticias antiguas (opcional)**: en amuma.org → Herramientas → Exportar → solo **Entradas**. En la web nueva → Herramientas → Importar → WordPress → sube el archivo y marca "Descargar e importar archivos adjuntos". El tema entiende el formato Divi de esas noticias.
+### Noticias de amuma.org
+
+El archivo **`importar/amuma-noticias.xml`** tiene las 133 noticias de amuma.org ya convertidas a bloques normales de WordPress, sin códigos de Divi. Lleva texto, galerías, imagen destacada, fechas y las mismas direcciones (`/la-voz-de-los-pacientes/`…).
+
+1. Activa antes el tema (paso 2).
+2. **Herramientas → Importar → WordPress → Instalar ahora** → **Ejecutar el importador**.
+3. Sube `amuma-noticias.xml`.
+4. En "Asignar autores", elige tu usuario. Marca **"Descargar e importar archivos adjuntos"** → **Enviar**.
+
+WordPress descarga las fotos de amuma.org (unas 390, más un par de vídeos y PDF), así que tarda unos minutos. Si el servidor corta a medias, vuelve a importar el mismo archivo: lo que ya está no se duplica. Al terminar, el tema corrige solo las referencias de las fotos que hayan cambiado de número.
+
+Para volver a generar el archivo con noticias nuevas: `tools/noticias-a-wxr.py` (lee la API pública de amuma.org).
 
 ## 1. Cambiar amuma.org a este tema (paso a paso)
 

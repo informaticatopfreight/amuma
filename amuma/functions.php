@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AMUMA_VERSION', '1.3.0' );
+define( 'AMUMA_VERSION', '1.3.1' );
 define( 'AMUMA_DIR', get_template_directory() );
 define( 'AMUMA_URI', get_template_directory_uri() );
 
@@ -16,6 +16,7 @@ require AMUMA_DIR . '/inc/template-tags.php';
 require AMUMA_DIR . '/inc/content.php';
 require AMUMA_DIR . '/inc/divi-compat.php';
 require AMUMA_DIR . '/inc/forms.php';
+require AMUMA_DIR . '/inc/import-fix.php';
 
 /**
  * Configuración del tema.
