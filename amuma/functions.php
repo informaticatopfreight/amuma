@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AMUMA_VERSION', '1.3.1' );
+define( 'AMUMA_VERSION', '1.3.2' );
 define( 'AMUMA_DIR', get_template_directory() );
 define( 'AMUMA_URI', get_template_directory_uri() );
 

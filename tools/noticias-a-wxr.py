@@ -391,6 +391,6 @@ xml = '''<?xml version="1.0" encoding="UTF-8" ?>
 %s
 </channel>
 </rss>
-''' % (cdata('amuma'), cdata(''), cdata('AMUMA'), cdata(''), cdata(''), cdata('Noticias'), cdata('Actividades'), '\n'.join(att), '\n'.join(items))
+''' % (cdata('amuma'), cdata(''), cdata('AMUMA'), cdata(''), cdata(''), cdata('Noticias'), cdata('Actividades'), '\n'.join(items), '\n'.join(att))
 open(OUT, 'w').write(xml)
 print(json.dumps({'posts': stats['posts'], 'attachments': len(att), 'image_blocks': stats['imgs'], 'galleries': stats['galleries'], 'casi_vacias': stats['empty']}, ensure_ascii=False))
